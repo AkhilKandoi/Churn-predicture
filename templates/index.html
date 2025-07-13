@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn predictor</title>
+</head>
+<body>
+    <h1>Churn predictor</h1>
+    <p>You can leave some empty if you want. Wherever there is 0 or 1 as default value, give 0 or 1 as input.</p>
+    <form id="churnForm">
+    <label>SeniorCitizen: <input type="number" name="SeniorCitizen" value="0" /></label><br />
+    <label>tenure: <input type="number" name="tenure" value="12" /></label><br />
+    <label>MonthlyCharges: <input type="number" name="MonthlyCharges" value="29.85" /></label><br />
+    <label>TotalCharges: <input type="number" name="TotalCharges" value="300.5" /></label><br />
+
+    <label>gender_Male: <input type="number" name="gender_Male" value="1" /></label><br />
+    <label>Partner_Yes: <input type="number" name="Partner_Yes" value="0" /></label><br />
+    <label>Dependents_Yes: <input type="number" name="Dependents_Yes" value="0" /></label><br />
+    <label>PhoneService_Yes: <input type="number" name="PhoneService_Yes" value="1" /></label><br />
+    <label>MultipleLines_No_phone_service: <input type="number" name="MultipleLines_No_phone_service" value="0" /></label><br />
+    <label>MultipleLines_Yes: <input type="number" name="MultipleLines_Yes" value="0" /></label><br />
+
+    <label>InternetService_Fiber_optic: <input type="number" name="InternetService_Fiber_optic" value="1" /></label><br />
+    <label>InternetService_No: <input type="number" name="InternetService_No" value="0" /></label><br />
+
+    <label>OnlineSecurity_No_internet_service: <input type="number" name="OnlineSecurity_No_internet_service" value="0" /></label><br />
+    <label>OnlineSecurity_Yes: <input type="number" name="OnlineSecurity_Yes" value="0" /></label><br />
+
+    <label>OnlineBackup_No_internet_service: <input type="number" name="OnlineBackup_No_internet_service" value="0" /></label><br />
+    <label>OnlineBackup_Yes: <input type="number" name="OnlineBackup_Yes" value="1" /></label><br />
+
+    <label>DeviceProtection_No_internet_service: <input type="number" name="DeviceProtection_No_internet_service" value="0" /></label><br />
+    <label>DeviceProtection_Yes: <input type="number" name="DeviceProtection_Yes" value="1" /></label><br />
+
+    <label>TechSupport_No_internet_service: <input type="number" name="TechSupport_No_internet_service" value="0" /></label><br />
+    <label>TechSupport_Yes: <input type="number" name="TechSupport_Yes" value="0" /></label><br />
+
+    <label>StreamingTV_No_internet_service: <input type="number" name="StreamingTV_No_internet_service" value="0" /></label><br />
+    <label>StreamingTV_Yes: <input type="number" name="StreamingTV_Yes" value="0" /></label><br />
+
+    <label>StreamingMovies_No_internet_service: <input type="number" name="StreamingMovies_No_internet_service" value="0" /></label><br />
+    <label>StreamingMovies_Yes: <input type="number" name="StreamingMovies_Yes" value="1" /></label><br />
+
+    <label>Contract_One_year: <input type="number" name="Contract_One_year" value="0" /></label><br />
+    <label>Contract_Two_year: <input type="number" name="Contract_Two_year" value="0" /></label><br />
+    <label>PaperlessBilling_Yes: <input type="number" name="PaperlessBilling_Yes" value="1" /></label><br />
+
+    <label>PaymentMethod_Credit_card_automatic: <input type="number" name="PaymentMethod_Credit_card_automatic" value="0" /></label><br />
+    <label>PaymentMethod_Electronic_check: <input type="number" name="PaymentMethod_Electronic_check" value="1" /></label><br />
+    <label>PaymentMethod_Mailed_check: <input type="number" name="PaymentMethod_Mailed_check" value="0" /></label><br />
+
+    <button type="submit">Predict</button>
+  </form>
+
+  <h3 id="result"></h3>
+  <script>
+    const form = document.getElementById('churnForm');
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = {};
+
+      for (let [key, value] of formData.entries()) {
+        data[key] = Number(value);
+      }
+
+      const res = await fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+      document.getElementById('result').innerText = "Prediction: " + json.prediction;
+    };
+  </script>
+</body>
+</html>
